@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Catálogo de perfumes importados y decants de Lev Importados. Consultas por WhatsApp.">
+<meta name="theme-color" content="#641826">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Lev Importados · Catálogo">
+<meta property="og:description" content="Perfumes importados, frascos y decants. Consultá por WhatsApp.">
+<meta property="og:image" content="https://nicolomano.github.io/lev-catalogo/og.jpg">
+<meta property="og:url" content="https://nicolomano.github.io/lev-catalogo/">
+<link rel="icon" href="logo.png">
+<title>Catálogo Lev Importados</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Onest:wght@400;500;600&display=swap">
+<style>
+/* Layout: vidriera de una sola columna en el celular. Franja bordó con la marca, buscador y marcas,
+   después frascos y decants en grilla de tarjetas con foto. Un solo look de marca (crema y bordó) en cualquier tema. */
+:root{
+  --wine:#641826; --wine-deep:#4A1019; --cream:#F4DCC3; --paper:#FBF5EE; --card:#FFFFFF;
+  --ink:#2B1016; --muted:#7A5F62; --line:#EADBCD; --soft:#F3E6DA;
+  --serif:"Playfair Display",Georgia,"Times New Roman",serif;
+  --sans:"Onest","Segoe UI",system-ui,-apple-system,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.45}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--wine);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px}
+
+header{background:var(--wine);color:var(--cream)}
+header .wrap{padding-block:26px 26px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+.logo{margin:0;line-height:0}
+.logo img{width:clamp(190px,52vw,270px);height:auto}
+.logo small{display:block;font-family:var(--sans);font-size:clamp(12px,3.2vw,15px);letter-spacing:.32em;text-transform:uppercase;font-weight:500;margin-top:10px}
+.tag{font-family:var(--serif);font-style:italic;font-size:17px;opacity:.9;margin-top:10px}
+.contact{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:14px}
+.contact a{color:var(--wine);background:var(--cream);text-decoration:none;font-weight:600;font-size:14px;padding:9px 16px;border-radius:999px}
+
+.tools{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
+.tools .wrap{padding-block:12px;display:flex;flex-direction:column;gap:10px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--soft);border-radius:14px;padding:4px;gap:4px}
+.seg button{border:0;background:none;border-radius:11px;padding:9px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;color:var(--muted)}
+.seg button b{font-family:var(--serif);font-weight:500;font-size:19px;line-height:1.1}
+.seg button span{font-size:12px}
+.seg button[aria-selected="true"]{background:var(--wine);color:var(--cream)}
+.search{width:100%;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:11px 16px;min-width:0}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--wine);border-color:var(--wine);color:var(--cream)}
+
+.aviso{font-size:13px;color:var(--muted);text-align:center;padding-block:14px 0}
+main{padding-block:8px 48px}
+section h2{font-family:var(--serif);font-weight:500;font-size:28px;margin:26px 0 4px;text-wrap:balance}
+section .sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+@media (min-width:700px){.grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.ph{position:relative;aspect-ratio:3/4;background:var(--wine);display:grid;place-items:center;overflow:hidden}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph .mono{font-family:var(--serif);color:var(--cream);text-align:center;padding:14px;display:flex;flex-direction:column;gap:6px;align-items:center}
+.ph .mono b{font-weight:500;font-size:clamp(20px,5.4vw,26px);line-height:1.15;overflow-wrap:anywhere;text-wrap:balance}
+.ph .mono span{font-family:var(--sans);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;opacity:.85}
+.card.out .ph{filter:grayscale(.85);opacity:.6}
+.badge{position:absolute;top:10px;left:10px;background:var(--paper);color:var(--ink);font-size:11.5px;font-weight:600;letter-spacing:.04em;padding:4px 9px;border-radius:999px}
+.badge.last{background:var(--cream);color:var(--wine)}
+.tx{padding:12px 13px 14px;display:flex;flex-direction:column;gap:3px;flex:1}
+.mk{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.nm{font-family:var(--serif);font-size:18px;font-weight:500;line-height:1.15;overflow-wrap:anywhere}
+.ml{font-size:13px;color:var(--muted)}
+.pr{margin-top:auto;padding-top:8px;font-weight:600;font-size:16px}
+.pr.ask{font-weight:500;color:var(--muted);font-size:14px}
+.dec{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:4px;border-top:1px solid var(--line);padding-top:8px}
+.dec li{display:flex;justify-content:space-between;gap:8px;font-size:14px}
+.dec li b{font-weight:600}
+.ask-btn{margin-top:10px;display:block;text-align:center;text-decoration:none;background:var(--wine);color:var(--cream);font-weight:600;font-size:14px;padding:9px 10px;border-radius:9px}
+.dcard{background:var(--soft);border-color:#D9BFA6}
+.dcard .ph{aspect-ratio:1/1;background:var(--cream)}
+.dcard .ph .mono{color:var(--wine)}
+.dcard .dtag{position:absolute;top:10px;right:10px;background:var(--wine);color:var(--cream);font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:999px}
+.dcard .dec{border-top-color:#D9BFA6}
+.dcard .dec li{background:var(--card);border-radius:8px;padding:7px 10px;align-items:center}
+.dcard .dec li span{font-weight:600;color:var(--wine)}
+.intro{background:var(--wine);color:var(--cream);border-radius:14px;padding:16px 18px;margin:18px 0 16px;display:flex;flex-direction:column;gap:4px}
+.intro h2{margin:0;color:var(--cream)}
+.intro p{margin:0;font-size:14px;opacity:.92;max-width:60ch}
+.empty{padding:32px 16px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px}
+footer{background:var(--wine-deep);color:var(--cream);text-align:center;font-size:13px}
+footer .wrap{padding-block:22px;display:flex;flex-direction:column;gap:4px}
+footer b{font-family:var(--serif);font-weight:500;font-size:20px;letter-spacing:.06em}
+.tools .wrap{gap:9px}
+</style>
+</head>
+<body style="margin:0">
+<header><div class="wrap">
+  <h1 class="logo"><img src="logo.png" alt="Lev Importados" width="270" height="165"></h1>
+  <div class="tag">Perfumes importados · frascos y decants</div>
+  <div class="contact" id="contact"></div>
+</div></header>
+
+<div class="tools"><div class="wrap">
+  <div class="seg" role="tablist" aria-label="Categoría">
+    <button type="button" role="tab" id="t-perf" data-tab="perfumes" aria-selected="true"><b>Perfumes</b><span id="n-perf"></span></button>
+    <button type="button" role="tab" id="t-dec" data-tab="decants" aria-selected="false"><b>Decants</b><span id="n-dec"></span></button>
+  </div>
+  <input type="search" class="search" id="q" placeholder="Buscar perfume o marca" aria-label="Buscar perfume o marca" autocomplete="off">
+  <div class="chips" id="chips" role="group" aria-label="Filtrar"></div>
+</div></div>
+
+<main class="wrap">
+  <p class="aviso" id="aviso"></p>
+  <div id="body"></div>
+</main>
+
+<footer><div class="wrap"><b>LEV</b><span id="foot"></span></div></footer>
+
+<script>
+(function(){
+const DATA=__DATA__;
+/* contacto: completar para mostrar los botones de consulta */
+const CONTACTO=__CONTACTO__;
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>'$ '+Math.round(n).toLocaleString('es-AR');
+const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const mlTxt=n=>String(n).replace('.',',')+' ml';
+const S={q:'',f:'todos',tab:'perfumes'};
+
+function waLink(texto){if(!CONTACTO.whatsapp)return null;return 'https://wa.me/'+CONTACTO.whatsapp.replace(/\D/g,'')+'?text='+encodeURIComponent(texto)}
+function igLink(){return CONTACTO.instagram?'https://ig.me/m/'+CONTACTO.instagram.replace(/^@/,''):null}
+function consultar(texto){const w=waLink(texto),i=igLink();const u=w||i;
+  return u?'<a class="ask-btn" href="'+esc(u)+'" target="_blank" rel="noopener">Consultar</a>':''}
+
+function iniciales(m){return String(m||'').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'LEV'}
+function foto(p){return '<div class="ph">'+(p.foto?'<img src="'+esc(p.foto)+'" alt="'+esc(p.nombre)+'" loading="lazy">':
+  '<div class="mono"><b>'+esc(p.nombre)+'</b>'+(p.ml&&!p.decants?'<span>'+mlTxt(p.ml)+'</span>':'')+'</div>')}
+
+function card(p){const out=!(p.stock>0);
+  return '<article class="card'+(out?' out':'')+'">'+foto(p)+(out?'<span class="badge">Agotado</span>':'')+'</div>'+
+   '<div class="tx"><div class="mk">'+esc(p.marca)+'</div><div class="nm">'+esc(p.nombre)+'</div>'+(p.ml?'<div class="ml">'+mlTxt(p.ml)+'</div>':'')+
+   (p.precio!=null?'<div class="pr num">'+money(p.precio)+'</div>':'<div class="pr ask">Consultar precio</div>')+
+   (out?'':consultar('Hola! Quería consultar por '+p.nombre+' de '+p.marca+(p.ml?' ('+p.ml+' ml)':'')+'.'))+'</div></article>'}
+function cardDec(p){
+  return '<article class="card dcard'+(p.agotado?' out':'')+'">'+foto(p)+(p.agotado?'<span class="badge">Agotado</span>':'')+'<span class="dtag">Decant</span></div>'+
+   '<div class="tx"><div class="mk">'+esc(p.marca)+'</div><div class="nm">'+esc(p.nombre)+'</div>'+
+   '<ul class="dec num">'+p.decants.map(d=>'<li><span>'+mlTxt(d.ml)+'</span><b>'+money(d.precio)+'</b></li>').join('')+'</ul>'+
+   (p.agotado?'':consultar('Hola! Quería consultar por un decant de '+p.nombre+' de '+p.marca+'.'))+'</div></article>'}
+
+const match=p=>!S.q||norm(p.nombre+' '+p.marca).includes(S.q);
+const lista=()=>S.tab==='decants'?DATA.decants:DATA.frascos;
+const disponible=p=>S.tab==='decants'?!p.agotado:p.stock>0;
+function render(){
+  const marcaF=S.f.startsWith('m:')?S.f.slice(2):null;
+  const l=lista().filter(p=>match(p)&&(S.f!=='disp'||disponible(p))&&(!marcaF||p.marca===marcaF));
+  let h;
+  if(S.tab==='decants')h='<div class="intro"><h2>Decants</h2><p>Fracciones de '+DATA.decants[0]?.decants.map(d=>mlTxt(d.ml)).join(' y ')+' envasadas del frasco original, para probar un perfume antes de comprar el frasco o llevarlo en la cartera.</p></div>'+
+    (l.length?'<div class="grid">'+l.map(cardDec).join('')+'</div>':'');
+  else h='<section><h2>Perfumes</h2><p class="sub">Frascos completos · '+DATA.frascos.filter(p=>p.stock>0).length+' disponibles</p>'+(l.length?'<div class="grid">'+l.map(card).join('')+'</div>':'')+'</section>';
+  $('#body').innerHTML=h+(l.length?'':'<div class="empty">No encontramos perfumes con esa búsqueda.</div>');
+}
+function setTab(t){S.tab=t;S.f='todos';document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab===t)));chips();render();window.scrollTo({top:0})}
+function chips(){const marcas={};lista().forEach(p=>{if(p.marca)marcas[p.marca]=(marcas[p.marca]||0)+1});
+  const top=Object.entries(marcas).sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+  const list=[['todos','Todos'],['disp','Disponibles']].concat(top.map(m=>['m:'+m,m]));
+  $('#chips').innerHTML=list.map(c=>'<button type="button" class="chip" data-f="'+esc(c[0])+'" aria-pressed="'+(S.f===c[0])+'">'+esc(c[1])+'</button>').join('');}
+
+$('#q').addEventListener('input',e=>{S.q=norm(e.target.value.trim());render()});
+document.querySelector('.seg').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(b&&b.dataset.tab!==S.tab)setTab(b.dataset.tab)});
+$('#n-perf').textContent=DATA.frascos.filter(p=>p.stock>0).length+' disponibles';$('#n-dec').textContent=DATA.decants.filter(p=>!p.agotado).length+' disponibles';
+if(!DATA.decants.length)$('#t-dec').hidden=true;
+if(location.hash==='#decants'&&DATA.decants.length)S.tab='decants',document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tab==='decants')));
+$('#chips').addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(!b)return;S.f=b.dataset.f;chips();render()});
+$('#aviso').textContent='Precios sujetos a modificación sin previo aviso. Actualizado el '+DATA.actualizado+'.';
+$('#foot').textContent='Lev Importados · Precios sujetos a modificación sin previo aviso.';
+const cw=waLink('Hola! Vi el catálogo de Lev Importados y quería consultar.'),ci=igLink();
+const ciP=CONTACTO.instagram?'https://www.instagram.com/'+CONTACTO.instagram.replace(/^@/,'')+'/':null;
+$('#contact').innerHTML=(cw?'<a href="'+esc(cw)+'" target="_blank" rel="noopener">WhatsApp</a>':'')+(ciP?'<a href="'+esc(ciP)+'" target="_blank" rel="noopener">@'+esc(CONTACTO.instagram.replace(/^@/,''))+'</a>':'');
+chips();render();
+})();
+</script>
+
+</body>
+</html>
