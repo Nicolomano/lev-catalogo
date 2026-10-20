@@ -87,6 +87,7 @@ section .sub{color:var(--muted);font-size:14px;margin:0 0 14px}
 .intro{background:var(--wine);color:var(--cream);border-radius:14px;padding:16px 18px;margin:18px 0 16px;display:flex;flex-direction:column;gap:4px}
 .intro h2{margin:0;color:var(--cream)}
 .intro p{margin:0;font-size:14px;opacity:.92;max-width:60ch}
+.intro .promo{margin-top:6px;opacity:1;font-weight:600;background:var(--cream);color:var(--wine);border-radius:9px;padding:8px 12px}
 .empty{padding:32px 16px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:14px}
 footer{background:var(--wine-deep);color:var(--cream);text-align:center;font-size:13px}
 footer .wrap{padding-block:22px;display:flex;flex-direction:column;gap:4px}
@@ -157,8 +158,11 @@ function render(){
   const marcaF=S.f.startsWith('m:')?S.f.slice(2):null;
   const l=lista().filter(p=>match(p)&&(S.f!=='disp'||disponible(p))&&(!marcaF||p.marca===marcaF));
   let h;
-  if(S.tab==='decants')h='<div class="intro"><h2>Decants</h2><p>Fracciones de '+DATA.decants[0]?.decants.map(d=>mlTxt(d.ml)).join(' y ')+' envasadas del frasco original, para probar un perfume antes de comprar el frasco o llevarlo en la cartera.</p></div>'+
-    (l.length?'<div class="grid">'+l.map(cardDec).join('')+'</div>':'');
+  if(S.tab==='decants'){const pr=DATA.promo||{};const promo=pr.min>1&&pr.pct>0?'<p class="promo">Llevando '+pr.min+' o más decants, aunque sean de distintos perfumes, tenés '+String(pr.pct).replace('.',',')+'% de descuento.</p>':'';
+    h='<div class="intro"><h2>Decants</h2><p>Fracciones de '+(DATA.decants[0]?DATA.decants[0].decants.map(d=>mlTxt(d.ml)).join(' y '):'')+' envasadas del frasco original, para probar un perfume antes de comprar el frasco o llevarlo en la cartera.</p>'+promo+'</div>'+
+    [['arabe','Árabes'],['disenador','Diseñador']].map(c=>{const g=l.filter(p=>(p.cat||'arabe')===c[0]);if(!g.length)return '';
+      const pre=g[0].decants.map(d=>mlTxt(d.ml)+' '+money(d.precio)).join(' · ');
+      return '<section><h2>'+c[1]+'</h2><p class="sub num">'+(g.every(p=>JSON.stringify(p.decants)===JSON.stringify(g[0].decants))?pre:'Precio según el perfume')+'</p><div class="grid">'+g.map(cardDec).join('')+'</div></section>'}).join('');}
   else h='<section><h2>Perfumes</h2><p class="sub">Frascos completos · '+DATA.frascos.filter(p=>p.stock>0).length+' disponibles</p>'+(l.length?'<div class="grid">'+l.map(card).join('')+'</div>':'')+'</section>';
   $('#body').innerHTML=h+(l.length?'':'<div class="empty">No encontramos perfumes con esa búsqueda.</div>');
 }
